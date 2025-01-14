@@ -22,24 +22,29 @@ const Login = () => {
    // console.log('data => ', data);
    // console.log('error => ', error);
    const onSubmit = async (data: FieldValues) => {
-     const toastId =  toast.loading('Logging in');
+      const toastId = toast.loading("Logging in");
 
-      try{
+      try {
          const userInfo = {
             id: data.userId,
             password: data.password,
          };
+
+         console.log(userInfo);
+
          const res = await login(userInfo).unwrap();
+         console.log(res);
+
          const user = verifyToken(res.data.accessToken) as TUser;
-   
+
          dispatch(setUser({ user: user, token: res.data.accessToken }));
-         toast.success('logged in', {id: toastId,  duration: 1000})
-         navigate(`/${user.role}/dashboard`)
+         toast.success("logged in", { id: toastId, duration: 1000 });
+         navigate(`/${user.role}/dashboard`);
          console.log("res =>", res.data.accessToken);
-      } catch(err) {
-         toast.error('Something went wrong',  {id: toastId,  duration: 1000})
+      } catch (err) {
+         console.log(err);
+         toast.error("Something went wrong", { id: toastId, duration: 1000 });
       }
-     
    };
 
    return (
