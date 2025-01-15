@@ -1,8 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /** @format */
 
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+   BaseQueryApi,
+   BaseQueryFn,
+   createApi,
+   DefinitionType,
+   FetchArgs,
+   fetchBaseQuery,
+} from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
 import { logout, setUser } from "../features/auth/authSlice";
+import { toast } from "sonner";
 
 const baseQuery = fetchBaseQuery({
    baseUrl: "http://localhost:5000/api/v1",
@@ -18,9 +27,18 @@ const baseQuery = fetchBaseQuery({
    },
 });
 
-const baseQueryWithRefreshToken = async (args, api, extraOptions) => {
+const baseQueryWithRefreshToken: BaseQueryFn<
+   FetchArgs,
+   BaseQueryApi,
+   DefinitionType
+> = async (args, api, extraOptions): Promise<any> => {
    let result = await baseQuery(args, api, extraOptions);
    // console.log(result);
+
+   if(result.error?.status === 404){
+    return  toast.error('User not found')
+   }
+
    if (result.error?.status === 401) {
       // Send Refresh
       console.log("Sending refresh token");
@@ -45,7 +63,7 @@ const baseQueryWithRefreshToken = async (args, api, extraOptions) => {
 
          result = await baseQuery(args, api, extraOptions);
       } else {
-         console.log('refresh token expired');
+         console.log("refresh token expired");
          api.dispatch(logout());
       }
    }
