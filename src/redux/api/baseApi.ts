@@ -19,7 +19,7 @@ const baseQuery = fetchBaseQuery({
    prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
-         console.log(token);
+    
          headers.set("authorization", `${token}`);
       }
 
@@ -36,12 +36,12 @@ const baseQueryWithRefreshToken: BaseQueryFn<
    // console.log(result);
 
    if(result.error?.status === 404){
-    return  toast.error('User not found')
+    return  toast.error(result.error.data.message)
    }
 
    if (result.error?.status === 401) {
       // Send Refresh
-      console.log("Sending refresh token");
+      // console.log("Sending refresh token");
 
       const res = await fetch(
          "http://localhost:5000/api/v1/auth/refresh-token",
@@ -63,7 +63,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 
          result = await baseQuery(args, api, extraOptions);
       } else {
-         console.log("refresh token expired");
+         // console.log("refresh token expired");
          api.dispatch(logout());
       }
    }
