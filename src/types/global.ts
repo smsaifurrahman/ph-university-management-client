@@ -18,7 +18,7 @@ export type TMeta = {
    totalPage: number;
 };
 
-export type TResponse <T> = {
+export type TResponse<T> = {
    data?: T;
    error?: TError;
    meta?: TMeta;
@@ -26,5 +26,9 @@ export type TResponse <T> = {
    message: string;
 };
 
+export type TResponseRedux<T> = TResponse<T> & BaseQueryApi;
 
-export type TResponseRedux<T> = TResponse<T> & BaseQueryApi
+export type TQueryParams = {
+   name: string;
+   value: boolean | React.Key;
+};

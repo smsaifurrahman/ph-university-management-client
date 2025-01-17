@@ -1,19 +1,24 @@
 /** @format */
 
 import { useGetAllSemesterQuery } from "../../../redux/features/admin/academicManagement.api";
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 import { TAcademicSemester } from "../../../types/academicManagement.type";
 import { useState } from "react";
+import { TQueryParams } from "../../../types";
 
 export type TTableData = Pick<
    TAcademicSemester,
-   "_id" | "name" | "year" | "startMonth" | "endMonth"
+   "name" | "year" | "startMonth" | "endMonth"
 >;
 
 const AcademicSemester = () => {
-   const [params, setParams] = useState([]);
-   const { data: semesterData } = useGetAllSemesterQuery(params);
+   const [params, setParams] = useState<TQueryParams[] | undefined>(undefined);
+   const {
+      data: semesterData,
+      isLoading,
+      isFetching,
+   } = useGetAllSemesterQuery(params);
 
    const tableData = semesterData?.data?.map(
       ({ _id, name, startMonth, endMonth, year }) => ({
@@ -74,16 +79,23 @@ const AcademicSemester = () => {
          key: "endMonth",
          dataIndex: "endMonth",
       },
+      {
+         title: "Action",
+         key: 'X',
+         render: () => {
+            return <div> <Button>Update</Button> </div>
+         }
+      }
    ];
 
    const onChange: TableProps<TTableData>["onChange"] = (
-      pagination,
+      _pagination,
       filters,
-      sorter,
+      _sorter,
       extra
    ) => {
       if (extra.action === "filter") {
-         const queryParams = [];
+         const queryParams: TQueryParams[] = [];
          filters.name?.forEach((item) => {
             queryParams.push({
                name: "name",
@@ -96,17 +108,21 @@ const AcademicSemester = () => {
                value: item,
             });
          });
-         setParams(queryParams)
+         setParams(queryParams);
          console.log(queryParams);
       }
       // console.log({ filters, extra });
    };
+
+   // if(isLoading) {
+   //    return <p>Loading..</p>
+   // }
    return (
-      <Table<TTableData>
+      <Table
+         loading={isFetching}
          columns={columns}
          dataSource={tableData}
          onChange={onChange}
-         showSorterTooltip={{ target: "sorter-icon" }}
       />
    );
 };
