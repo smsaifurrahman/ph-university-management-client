@@ -1,5 +1,6 @@
 /** @format */
 
+import { Children } from "react";
 import AcademicSemester from "../pages/admin/academicManagement/AcademicSemester";
 import CreateAcademicSemester from "../pages/admin/academicManagement/CreateAcademicSemester";
 import AdminDashboard from "../pages/admin/AdminDashboard";
@@ -8,6 +9,8 @@ import CreateFaculty from "../pages/admin/userManagement/CreateFaculty";
 import CreateStudent from "../pages/admin/userManagement/CreateStudent";
 import StudentData from "../pages/admin/userManagement/StudentData";
 import StudentDetails from "../pages/admin/userManagement/StudentDetails";
+import SemesterRegistration from "../pages/admin/Course Management/SemesterRegistration";
+import RegisteredSemesters from "../pages/admin/Course Management/RegisteredSemester";
 
 export const adminPaths = [
    {
@@ -74,6 +77,22 @@ export const adminPaths = [
         
       ],
    },
+   {
+      name: 'Course Management',
+      children: [
+         {
+            name: "Registered Semesters",
+            path: 'registered-semesters',
+            element: <RegisteredSemesters />
+         },
+         {
+            name: "Semester Registration",
+            path: 'semester-registration',
+            element: <SemesterRegistration />
+         },
+     
+      ]
+   }
 ];
 
 // export const adminSidebarItems = adminPaths.reduce((acc: TSidebarItem[], item) => {
