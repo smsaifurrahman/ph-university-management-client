@@ -1,4 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/**
+ * eslint-disable @typescript-eslint/no-explicit-any
+ *
+ * @format
+ */
+
 /** @format */
 
 import {
@@ -19,7 +24,6 @@ const baseQuery = fetchBaseQuery({
    prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
-    
          headers.set("authorization", `${token}`);
       }
 
@@ -35,8 +39,8 @@ const baseQueryWithRefreshToken: BaseQueryFn<
    let result = await baseQuery(args, api, extraOptions);
    // console.log(result);
 
-   if(result.error?.status === 404){
-    return  toast.error(result.error.data.message)
+   if (result.error?.status === 404) {
+      return toast.error(result.error.data.message);
    }
 
    if (result.error?.status === 401) {
@@ -73,6 +77,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
    reducerPath: "baseApi",
    baseQuery: baseQueryWithRefreshToken,
+   tagTypes: ["semester"],
    // baseQuery: baseQuery,
    endpoints: () => ({}),
 });
