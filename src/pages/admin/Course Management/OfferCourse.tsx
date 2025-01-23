@@ -77,7 +77,7 @@ const OfferCourse = () => {
     };
 
     const res = await addOfferedCourse(offeredCourseData);
-    console.log(res);
+    console.log( 'From offer course', res);
   };
 
   return (
