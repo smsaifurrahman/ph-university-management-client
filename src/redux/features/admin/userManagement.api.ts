@@ -34,7 +34,30 @@ const userManagementApi = baseApi.injectEndpoints({
                 body: data,
              }),
           }),
+          getAllFaculties: builder.query({
+            query: (agrs) => {
+               const params = new URLSearchParams();
+   
+               if (agrs) {
+                  agrs.forEach((item: TQueryParams) => {
+                     params.append(item.name, item.value as string);
+                  });
+               }
+               return {
+                  url: "/faculties",
+                  method: "GET",
+                  params: params,
+               };
+            },
+            transformResponse: (response: TResponseRedux<TStudent[]>) => {
+               console.log("inside redux", response);
+               return {
+                  data: response.data,
+                  meta: response.meta,
+               };
+            },
+         }),
        }),
 })
 
-export const {useAddStudentMutation,useGetAllStudentsQuery} = userManagementApi;
+export const {useAddStudentMutation,useGetAllStudentsQuery, useGetAllFacultiesQuery} = userManagementApi;
