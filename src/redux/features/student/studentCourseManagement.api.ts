@@ -1,4 +1,5 @@
 import { TQueryParams, TResponseRedux } from "../../../types";
+import { TOfferedCourse } from "../../../types/studentCourse.type";
 import { baseApi } from "../../api/baseApi";
 
 const studentCourseApi = baseApi.injectEndpoints({
@@ -6,6 +7,7 @@ const studentCourseApi = baseApi.injectEndpoints({
           getAllOfferedCourses: builder.query({
              query: (agrs) => {
                 const params = new URLSearchParams();
+                console.log(params);
     
                 if (agrs) {
                    agrs.forEach((item: TQueryParams) => {
@@ -18,7 +20,8 @@ const studentCourseApi = baseApi.injectEndpoints({
                    params: params,
                 };
              },
-             transformResponse: (response: TResponseRedux<any>) => {
+             providesTags: ['offeredCourse'],
+             transformResponse: (response: TResponseRedux<TOfferedCourse>) => {
                 console.log("inside redux", response);
                 return {
                    data: response.data,
@@ -37,3 +40,5 @@ const studentCourseApi = baseApi.injectEndpoints({
       
        }),
 })
+
+export const {useGetAllOfferedCoursesQuery} = studentCourseApi;
